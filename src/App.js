@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 //Pages
 import Home from "./pages/Home.js";
 import Country from "./pages/Country.js";
+import CountryR from "./pages/CountryRedux.js"; //Redux
 import CountryView from "./pages/CountryView.js";
 import City from "./pages/City.js";
 import CityView from "./pages/CityView.js";
@@ -228,11 +229,21 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route
+          {/* <Route
             path=""
             element={
               <ProtectedRoute>
                 <Country />
+              </ProtectedRoute>
+            }
+          /> */}
+
+          {/*Redux*/}
+          <Route
+            path=""
+            element={
+              <ProtectedRoute>
+                <CountryR />
               </ProtectedRoute>
             }
           />
