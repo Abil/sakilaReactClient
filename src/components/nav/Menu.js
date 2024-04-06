@@ -15,6 +15,8 @@ const Menu = () => {
   //Redux Auth
   const reduxAuth = useSelector((state) => state.auth);
   console.log("Auth details from Redux State: ", reduxAuth.user);
+  //Note that when you refresh the stae will be lost
+  //When the app loads you need to read in from localstorage and push to the redux state
 
   const logout = () => {
     setAuth({ ...auth, user: null, token: "" });
