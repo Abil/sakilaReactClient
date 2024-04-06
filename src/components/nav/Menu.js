@@ -1,13 +1,31 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"; //Redux
+import { useDispatch } from "react-redux"; //Redux
 import { useAuth } from "../../context/auth";
+
+//Redux Actions:
+import { rLogout } from "../../store/actions/authActions.js";
 
 const Menu = () => {
   const navigate = useNavigate();
 
   const [auth, setAuth] = useAuth();
 
+  const dispatch = useDispatch(); //Redux
+  //Redux Auth
+  const reduxAuth = useSelector((state) => state.auth);
+  console.log("Auth details from Redux State: ", reduxAuth.user);
+
   const logout = () => {
     setAuth({ ...auth, user: null, token: "" });
+
+    //Redux Dispatch
+    // dispatch({
+    //   type: "LOGOUT",
+    // });
+    //Incase of using actions from a file
+    dispatch(rLogout());
+
     localStorage.removeItem("auth");
     navigate("/login");
   };

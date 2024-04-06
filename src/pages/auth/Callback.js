@@ -3,13 +3,18 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 import { /*useHistory*/ Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux"; //Redux
 
 //Context
 import { useAuth } from "../../context/auth";
 
+//Redux Actions:
+import { rSetAuth } from "../../store/actions/authActions.js";
+
 const CallbackPage = () => {
   //const history = useHistory();
   const [auth, setAuth] = useAuth();
+  const dispatch = useDispatch(); //Redux
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,6 +49,15 @@ const CallbackPage = () => {
         //console.log("data: ", data);
         if (data.ok) {
           setAuth({ ...auth, token: authData.token, user: authData.user });
+
+          //Redux Dispatch
+          // dispatch({
+          //   type: "SET_AUTH",
+          //   payload: { user: authData.user, token: authData.token },
+          // });
+          //Incase of using action from a file
+          dispatch(rSetAuth(authData.user, authData.token));
+
           localStorage.setItem("auth", JSON.stringify(authData));
           // Update loading state
           setLoading(false);

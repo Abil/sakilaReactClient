@@ -1,9 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Navigate /*, useLocation */ } from "react-router-dom";
+import { useDispatch } from "react-redux"; //Redux
 
 //Context
 import { useAuth } from "../../context/auth";
+
+//Redux Actions:
+import { rSetAuth } from "../../store/actions/authActions.js";
 
 export default function Login() {
   //State
@@ -13,6 +17,7 @@ export default function Login() {
 
   //Hooks
   const [auth, setAuth] = useAuth();
+  const dispatch = useDispatch(); //Redux
   const navigate = useNavigate();
   // const location = useLocation();
   // console.log("location => ", location.state);
@@ -30,6 +35,15 @@ export default function Login() {
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, token: data.token, user: data.user });
+
+        //Redux Dispatch
+        // dispatch({
+        //   type: "SET_AUTH",
+        //   payload: { user: data.user, token: data.token },
+        // });
+        //Incase of using action from a file
+        dispatch(rSetAuth(data.user, data.token));
+
         navigate("/");
 
         //This is when you get routed back to a login or register from a protected route
