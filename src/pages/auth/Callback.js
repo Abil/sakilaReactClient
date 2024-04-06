@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useDispatch } from "react-redux"; //Redux
 
 import { /*useHistory*/ Navigate } from "react-router-dom";
+
+//Redux Toolkit Slice options
+import { setUser, setToken } from "../../store/slices/authSlice.js";
 
 //Context
 import { useAuth } from "../../context/auth";
 
 const CallbackPage = () => {
+  //Redux
+  const dispatch = useDispatch();
+
   //const history = useHistory();
   const [auth, setAuth] = useAuth();
   const [loading, setLoading] = useState(true);
@@ -44,6 +51,12 @@ const CallbackPage = () => {
         //console.log("data: ", data);
         if (data.ok) {
           setAuth({ ...auth, token: authData.token, user: authData.user });
+
+          ///Redux calling slice actions directly
+          dispatch(setUser(authData.user));
+          dispatch(setToken(authData.token));
+          ///
+
           localStorage.setItem("auth", JSON.stringify(authData));
           // Update loading state
           setLoading(false);

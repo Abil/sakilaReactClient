@@ -1,11 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Navigate /*, useLocation */ } from "react-router-dom";
+import { useDispatch } from "react-redux"; //Redux
 
 //Context
 import { useAuth } from "../../context/auth";
 
+//Redux Toolkit Slice options
+import { setUser, setToken } from "../../store/slices/authSlice.js";
+
 export default function Login() {
+  //Redux
+  const dispatch = useDispatch();
+
   //State
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -30,6 +37,13 @@ export default function Login() {
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, token: data.token, user: data.user });
+
+        ///Redux calling slice actions directly
+        console.log("calling dispatch: ", data.user);
+        dispatch(setUser(data.user));
+        dispatch(setToken(data.token));
+        ///
+
         navigate("/");
 
         //This is when you get routed back to a login or register from a protected route
