@@ -1,19 +1,24 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { Outlet, Link } from "react-router-dom";
+
+//MUI Imports
+import { Box, Tabs, Tab } from "@mui/material";
 
 const GeoNav = () => {
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <>
-      <ul>
-        <li>
-          <NavLink to="./">Country</NavLink>
-        </li>
-        <li>
-          <NavLink to="./city">City</NavLink>
-        </li>
-        <li>
-          <NavLink to="./address">Address</NavLink>
-        </li>
-      </ul>
+      <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <Tabs value={value} onChange={handleChange} centered>
+          <Tab label="Country" component={Link} to="./" />
+          <Tab label="City" component={Link} to="./city" />
+          <Tab label="Address" component={Link} to="./address" />
+        </Tabs>
+      </Box>
 
       <Outlet />
     </>

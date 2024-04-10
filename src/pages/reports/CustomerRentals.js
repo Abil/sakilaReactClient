@@ -34,7 +34,7 @@ const Customer = () => {
         <h2>Customers Rentals</h2>
 
         <ul>
-          {customers[0].map((customer, index) => (
+          {customers[0]?.map((customer, index) => (
             <li key={index}>
               <>
                 {`Customer: ${customer.first_name} ${customer.last_name} Total Rentals: ${customer.total_rentals} Total Payment Amount: ${customer.total_payment_amount}`}{" "}
