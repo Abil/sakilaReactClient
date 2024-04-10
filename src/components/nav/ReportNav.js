@@ -5,7 +5,7 @@ import { Link, Outlet } from "react-router-dom";
 import { Box, Tabs, Tab } from "@mui/material";
 
 const ReportNav = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(null);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

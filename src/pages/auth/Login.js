@@ -1,6 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Navigate /*, useLocation */ } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+
+//MUI Components
+import { Container, TextField, Button, Typography, Link } from "@mui/material";
+import { Google } from "@mui/icons-material";
 
 //Context
 import { useAuth } from "../../context/auth";
@@ -31,12 +35,6 @@ export default function Login() {
         localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, token: data.token, user: data.user });
         navigate("/");
-
-        //This is when you get routed back to a login or register from a protected route
-        //   navigate(
-        //     location.state ||
-        //       `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
-        //   );
       }
     } catch (err) {
       console.log(err);
@@ -62,27 +60,62 @@ export default function Login() {
     <>
       {!auth?.user ? (
         <>
-          <h1>Login Page</h1>
-          <div>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              <button type="submit">Submit</button>
-            </form>
-            <button onClick={handleGoogleAuth}>Sigin in with Google</button>
-          </div>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Login
+            </Typography>
+            <TextField
+              fullWidth
+              label="Email"
+              variant="outlined"
+              margin="normal"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              margin="normal"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              //color="primary"
+              fullWidth
+              onClick={handleSubmit}
+              style={{ marginTop: "20px" }}
+            >
+              Login
+            </Button>
+            <Button
+              variant="contained"
+              //color="default"
+              fullWidth
+              startIcon={<Google />}
+              onClick={handleGoogleAuth}
+              style={{ marginTop: "10px" }}
+            >
+              Login with Google
+            </Button>
+            <Typography
+              variant="body2"
+              align="center"
+              style={{ marginTop: "20px" }}
+            >
+              Don't have an account? <Link href="/register">Register</Link>
+            </Typography>
+          </Container>
         </>
       ) : (
         <>

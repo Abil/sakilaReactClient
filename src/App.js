@@ -1,6 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
+
+//MUI
+import { Container, Typography, Button } from "@mui/material";
 
 //Pages
 import Home from "./pages/Home.js";
@@ -507,9 +510,26 @@ function App() {
         <Route
           path="*"
           element={
-            <div>
-              <h1>Page not found</h1>
-            </div>
+            <Container
+              maxWidth="sm"
+              style={{ marginTop: "100px", textAlign: "center" }}
+            >
+              <Typography variant="h2" gutterBottom>
+                404 - Page Not Found
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Oops! The page you are looking for doesn't exist.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/"
+                style={{ marginTop: "20px" }}
+              >
+                Go to Home Page
+              </Button>
+            </Container>
           }
         />
       </Routes>
