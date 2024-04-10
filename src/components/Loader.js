@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate /*, useLocation*/ } from "react-router-dom";
 import LoadingGIF from "../images/loading.gif";
 
+//MUI Imports
+import { Grid } from "@mui/material";
+
 export default function Loader({
   /*path = "login" */
   timeInSeconds = 3,
@@ -25,11 +28,20 @@ export default function Loader({
   }, [count]);
 
   return (
-    <div
-    // className="d-flex justify-content-center align-items-center"
-    // style={{ height: "90vh" }}
+    // <div
+    // // className="d-flex justify-content-center align-items-center"
+    // // style={{ height: "90vh" }}
+    // >
+    //   <img src={LoadingGIF} alt="Loading" style={{ width: "400px" }} />
+    // </div>
+
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: "100vh" }}
     >
       <img src={LoadingGIF} alt="Loading" style={{ width: "400px" }} />
-    </div>
+    </Grid>
   );
 }
