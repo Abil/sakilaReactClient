@@ -28,13 +28,6 @@ export default function Loader({
   }, [count]);
 
   return (
-    // <div
-    // // className="d-flex justify-content-center align-items-center"
-    // // style={{ height: "90vh" }}
-    // >
-    //   <img src={LoadingGIF} alt="Loading" style={{ width: "400px" }} />
-    // </div>
-
     <Grid
       container
       justifyContent="center"
