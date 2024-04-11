@@ -3,7 +3,41 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+//MUI Components
+import { Typography, Container, Button, Box, TextField } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+//import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Modal from "@mui/material/Modal";
+
+//MUI Box Style
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Country = () => {
+  //MUI Modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [editedCountryName, setEditedCountryName] = useState("");
+
   const [countries, setCountries] = useState([]);
   const [newCountryName, setNewCountryName] = useState("");
   const [selectedCountryId, setSelectedCountryId] = useState(null);
@@ -51,8 +85,11 @@ const Country = () => {
 
   const handleUpdateCountry = async () => {
     try {
+      // await axios.put(`/country/${selectedCountryId}`, {
+      //   country: newCountryNameRef.current.value,
+      // });
       await axios.put(`/country/${selectedCountryId}`, {
-        country: newCountryNameRef.current.value,
+        country: editedCountryName,
       });
       setSelectedCountryId(null);
       fetchCountries(); // Refresh country list
@@ -65,18 +102,132 @@ const Country = () => {
     navigate(`./country/${id}`);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
 
   return (
     <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Edit Country
+          </Typography>
+          <TextField
+            id="outlined-basic"
+            label="New Country Name"
+            variant="outlined"
+            ref={newCountryNameRef}
+            onChange={(e) => {
+              setEditedCountryName(e.target.value);
+            }}
+          />
+
+          <Button
+            variant="contained"
+            //color="primary"
+            fullWidth
+            onClick={() => {
+              handleUpdateCountry();
+              handleClose();
+            }}
+            style={{ marginTop: "20px" }}
+          >
+            Submit
+          </Button>
+        </Box>
+      </Modal>
+
       {!showCreateForm ? (
         <>
-          <h1>Country Page</h1>
-          <h2>Countries</h2>
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Countries
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                {/* <TableHead>
+                  <TableRow>
+                    <TableCell>Name </TableCell>
+                    <TableCell align="right">Rentals</TableCell>
+                    <TableCell align="right">Payments</TableCell>
+                  </TableRow>
+                </TableHead> */}
+                <TableBody>
+                  {countries.map((country, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {`${country.country}`}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          //color="primary"
+                          fullWidth
+                          onClick={() => {
+                            setSelectedCountryId(country.country_id);
+                            handleOpen();
+                          }}
+                          style={{ marginTop: "20px" }}
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleDeleteCountry(country.country_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
+            >
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          <ul>
+              <Fab
+                onClick={() => setShowCreateForm(true)}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
+
+          {/* <h1>Country Page</h1>
+          <h2>Countries</h2> */}
+
+          {/* <ul>
             {countries.map((country) => (
               <li key={country.country_id}>
                 {selectedCountryId === country.country_id ? (
@@ -116,18 +267,11 @@ const Country = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
-          {/* <div>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button key={i} onClick={() => handlePageChange(i + 1)}>
-                {i + 1}
-              </button>
-            ))}
-          </div> */}
 
-          <div>
+          {/* <div>
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
@@ -161,15 +305,56 @@ const Country = () => {
             >
               Next
             </button>
-          </div>
+          </div> */}
 
-          <button onClick={() => setShowCreateForm(true)}>
+          {/* <button onClick={() => setShowCreateForm(true)}>
             Create New Country
-          </button>
+          </button> */}
         </>
       ) : (
         <>
-          <h2>Create Country</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Country
+            </Typography>
+            <TextField
+              fullWidth
+              label="Country Name"
+              variant="outlined"
+              margin="normal"
+              value={newCountryName}
+              onChange={(e) => setNewCountryName(e.target.value)}
+            />
+
+            <Button
+              variant="contained"
+              //color="primary"
+              fullWidth
+              onClick={handleCreateCountry}
+              style={{ marginTop: "20px" }}
+            >
+              Create
+            </Button>
+            <Button
+              variant="contained"
+              //color="default"
+              fullWidth
+              onClick={() => setShowCreateForm(false)}
+              style={{ marginTop: "10px" }}
+            >
+              Cancel
+            </Button>
+          </Container>
+
+          {/* <h2>Create Country</h2>
           <input
             type="text"
             value={newCountryName}
@@ -177,7 +362,7 @@ const Country = () => {
             placeholder="Enter country name"
           />
           <button onClick={handleCreateCountry}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

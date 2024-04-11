@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
+//MUI Components
+import { Container, Typography, Link } from "@mui/material";
+
 const Email = () => {
   const [emailCount, setEmailCount] = useState({});
 
@@ -20,14 +23,26 @@ const Email = () => {
   };
 
   return (
-    <div>
-      <>
-        <h1>Emails Report</h1>
-        <h2>Email Count</h2>
+    <Container
+      maxWidth="sm"
+      style={{
+        marginTop: "100px",
+        border: "1px solid #ccc",
+        padding: "20px",
+        borderRadius: "5px",
+      }}
+    >
+      <Typography variant="h3" align="center" gutterBottom>
+        Email Count
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {emailCount.emails}
+      </Typography>
 
-        <p>{`Email Count: ${emailCount.emails}`} </p>
-      </>
-    </div>
+      <Typography variant="body2" align="center" style={{ marginTop: "20px" }}>
+        <Link href="/customer">Customer</Link> Emails
+      </Typography>
+    </Container>
   );
 };
 

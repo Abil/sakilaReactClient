@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
+//MUI Components
+import { Container, Typography, Link } from "@mui/material";
+
 const PaymentAverage = () => {
   const [paymentAverage, setPaymentAverage] = useState({});
 
@@ -20,15 +23,29 @@ const PaymentAverage = () => {
   };
 
   return (
-    <div>
-      <>
-        <h1>Payment Report</h1>
-        <h2>Payment Averages</h2>
+    <Container
+      maxWidth="sm"
+      style={{
+        marginTop: "100px",
+        border: "1px solid #ccc",
+        padding: "20px",
+        borderRadius: "5px",
+      }}
+    >
+      <Typography variant="h3" align="center" gutterBottom>
+        Payment Average
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {`Max: ${paymentAverage.max_payment}`}
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {`Avg: ${paymentAverage.average_payment}`}
+      </Typography>
 
-        <p>{`Max Payment: ${paymentAverage.max_payment}`} </p>
-        <p>{`Average Payment: ${paymentAverage.average_payment}`} </p>
-      </>
-    </div>
+      <Typography variant="body2" align="center" style={{ marginTop: "20px" }}>
+        <Link href="/payment">Payments</Link>
+      </Typography>
+    </Container>
   );
 };
 

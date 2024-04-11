@@ -2,6 +2,16 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
+//MUI Components
+import { Typography, Container } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
 const Inventory = () => {
   const [inventories, setInventories] = useState([]);
 
@@ -20,22 +30,36 @@ const Inventory = () => {
   };
 
   return (
-    <div>
-      <>
-        <h1>Inventory Count Report</h1>
-        <h2>Inventory Counts</h2>
-
-        <ul>
-          {inventories.map((inventory, index) => (
-            <li key={index}>
-              <>
-                {`Store ID: ${inventory.store_id} Store Address: ${inventory.store.address.address} Items: ${inventory.inventory_items} `}{" "}
-              </>
-            </li>
-          ))}
-        </ul>
-      </>
-    </div>
+    <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+      <Typography variant="h2" align="center" gutterBottom>
+        Inventory Count
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Address </TableCell>
+              <TableCell align="right">ID</TableCell>
+              <TableCell align="right">Items</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {inventories.map((inventory, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {`${inventory.store.address.address}`}
+                </TableCell>
+                <TableCell align="right">{inventory.store_id}</TableCell>
+                <TableCell align="right">{inventory.inventory_items}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 

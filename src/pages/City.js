@@ -3,7 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+
+import Select from "@mui/material/Select";
+
 const City = () => {
+  const [selectedCountry, setSelectedCountry] = useState(0);
+
+  const handleCountryChange = (event) => {
+    setSelectedCountry(event.target.value);
+  };
+
   const [cities, setCities] = useState([]);
   const [newCityName, setNewCityName] = useState("");
   const [selectedCityId, setSelectedCityId] = useState(null);
@@ -32,9 +50,13 @@ const City = () => {
 
   const handleCreateCity = async () => {
     try {
+      // await axios.post("/city", {
+      //   city: newCityName,
+      //   country_id: countryRef.current.value,
+      // });
       await axios.post("/city", {
         city: newCityName,
-        country_id: countryRef.current.value,
+        country_id: selectedCountry,
       });
       setNewCityName("");
       setShowCreateForm(false);
@@ -78,6 +100,7 @@ const City = () => {
     try {
       const response = await axios.get("/country");
       setCountries(response.data.countries);
+      setSelectedCountry(response.data.countries[0]["country_id"]);
     } catch (error) {
       console.error("Error fetching countries:", error);
     }
@@ -88,8 +111,8 @@ const City = () => {
       const response = await axios.get(
         `/country/search?query=${inputValue.target.value}`
       );
-      console.log("countries:", response.data);
       setCountries(response.data);
+      setSelectedCountry(response.data[0]["country_id"]);
     } catch (error) {
       console.error("Error searching countries:", error);
       return [];
@@ -189,7 +212,80 @@ const City = () => {
         </>
       ) : (
         <>
-          <h2>Create City</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create City
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleCountrySearch} // Handle input change event
+                element={TextField}
+                label="Search"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedCountry}
+                onChange={handleCountryChange}
+                //onChange={handleChange}
+              >
+                {countries.map((country) => (
+                  <MenuItem value={country.country_id}>
+                    {country.country}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                fullWidth
+                label="City Name"
+                variant="outlined"
+                margin="normal"
+                value={newCityName}
+                onChange={(e) => setNewCityName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateCity}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create City</h2>
 
           <DebounceInput
             type="text"
@@ -214,7 +310,7 @@ const City = () => {
             placeholder="Enter city name"
           />
           <button onClick={handleCreateCity}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
+//MUI Components
+import { Container, Typography, Link } from "@mui/material";
+
 const ReplacementCost = () => {
   const [replacementCost, setReplacementCost] = useState({});
 
@@ -20,16 +23,28 @@ const ReplacementCost = () => {
   };
 
   return (
-    <div>
-      <>
-        <h1>Replacement Cost Report</h1>
-        <h2>Replacement Costs</h2>
-
-        <p>{`Least Expensive RC: ${replacementCost.least_expensive}`} </p>
-        <p>{`Most Expensive RC: ${replacementCost.most_expensive}`} </p>
-        <p>{`Average RC: ${replacementCost.average_replacement_cost}`} </p>
-      </>
-    </div>
+    <Container
+      maxWidth="sm"
+      style={{
+        marginTop: "100px",
+        border: "1px solid #ccc",
+        padding: "20px",
+        borderRadius: "5px",
+      }}
+    >
+      <Typography variant="h3" align="center" gutterBottom>
+        Replacement Costs
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {`Max: ${replacementCost.most_expensive}`}
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {`Min: ${replacementCost.least_expensive}`}
+      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {`Avg: ${replacementCost.average_replacement_cost}`}
+      </Typography>
+    </Container>
   );
 };
 
