@@ -2,6 +2,18 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
+//MUI Components
+import { Typography, Container } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
 const Inventory = () => {
   const [inventories, setInventories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,65 +33,49 @@ const Inventory = () => {
     }
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
   return (
-    <div>
-      <>
-        <h1>Inventory Report</h1>
-        <h2>Inventories</h2>
+    <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+      <Typography variant="h2" align="center" gutterBottom>
+        Inventory
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Title </TableCell>
+              <TableCell align="right">Store</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {inventories.map((inventory, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {inventory.film.title}
+                </TableCell>
 
-        <ul>
-          {inventories.map((inventory) => (
-            <li key={inventory.inventory_id}>
-              <>
-                {`Film: ${inventory.film.title} Store: ${inventory.store.address.address}`}{" "}
-              </>
-            </li>
-          ))}
-        </ul>
-
-        {/* Pagination */}
-
-        <div>
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => {
-            const page = i + 1;
-            // Display only a subset of page numbers around the current page
-            if (
-              page === 1 ||
-              page === currentPage ||
-              page === totalPages ||
-              Math.abs(currentPage - page) <= 2
-            ) {
-              return (
-                <button
-                  key={i}
-                  onClick={() => handlePageChange(page)}
-                  disabled={currentPage === page}
-                >
-                  {page}
-                </button>
-              );
-            }
-            return null;
-          })}
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next
-          </button>
-        </div>
-      </>
-    </div>
+                <TableCell align="right">
+                  {inventory.store.address.address}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Stack spacing={2} style={{ marginTop: "50px", alignItems: "center" }}>
+        <Pagination
+          count={totalPages}
+          color="primary"
+          onChange={handlePageChange}
+        />
+      </Stack>
+    </Container>
   );
 };
 
