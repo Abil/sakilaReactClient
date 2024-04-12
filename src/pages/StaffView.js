@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI Components
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+
 const StaffView = () => {
   const [staff, setStaff] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -177,13 +188,41 @@ const StaffView = () => {
               </button>
             </form>
           ) : (
-            <>
-              <h2>{`${staff.first_name}, ${staff.last_name}`}</h2>
-              <h2>{`${staff.email},  Username: ${staff.username}`}</h2>
-              <h2>{`${staff.address.address}, Store: ${staff.store.address.address}`}</h2>
+            <Container
+              maxWidth="sm"
+              style={{
+                marginTop: "100px",
+                border: "1px solid #ccc",
+                padding: "20px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Name: ${staff.first_name} ${staff.last_name} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Email: ${staff.email} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`User Name: ${staff.username}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Address: ${staff.address.address}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Store: ${staff.store.address.address}`}
+              </Typography>
 
-              <button onClick={handleEditButtonClick}>Edit</button>
-            </>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleEditButtonClick}
+                style={{ marginTop: "20px" }}
+              >
+                Edit
+              </Button>
+            </Container>
           )}
         </div>
       ) : (

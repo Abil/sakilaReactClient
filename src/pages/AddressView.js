@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI Components
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+
 const AddressView = () => {
   const [address, setAddress] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -139,15 +150,42 @@ const AddressView = () => {
               </button>
             </form>
           ) : (
-            <>
-              <h2>{`${address.address}`}</h2>
-              <h2>{`${address.address2}`}</h2>
-              <h2>{`${address.district}, ${address.city.city}`}</h2>
-              <h2>{`${address.postal_code}`}</h2>
-              <h2>{`${address.phone}`}</h2>
-
-              <button onClick={handleEditButtonClick}>Edit</button>
-            </>
+            <Container
+              maxWidth="sm"
+              style={{
+                marginTop: "100px",
+                border: "1px solid #ccc",
+                padding: "20px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Address: ${address.address} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {address.address2
+                  ? `Address: ${address.address2} `
+                  : "Address: N/A"}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`District/City: ${address.district}, ${address.city.city}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Postalcode: ${address.postal_code}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Phone: ${address.phone}`}
+              </Typography>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleEditButtonClick}
+                style={{ marginTop: "20px" }}
+              >
+                Edit
+              </Button>
+            </Container>
           )}
         </div>
       ) : (

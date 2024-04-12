@@ -4,7 +4,6 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
 //MUI Components
-//MUI
 import {
   Typography,
   Container,
@@ -196,36 +195,31 @@ const CityView = () => {
               </button> */}
             </form>
           ) : (
-            <>
-              <Container
-                maxWidth="sm"
-                style={{
-                  marginTop: "100px",
-                  border: "1px solid #ccc",
-                  padding: "20px",
-                  borderRadius: "5px",
-                }}
+            <Container
+              maxWidth="sm"
+              style={{
+                marginTop: "100px",
+                border: "1px solid #ccc",
+                padding: "20px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography variant="h6" align="center" gutterBottom>
+                {`City: ${city.city} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Country: ${city.country.country}`}
+              </Typography>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleEditButtonClick}
+                style={{ marginTop: "20px" }}
               >
-                <Typography variant="h6" align="center" gutterBottom>
-                  {`City: ${city.city} `}
-                </Typography>
-                <Typography variant="h6" align="center" gutterBottom>
-                  {`Country: ${city.country.country}`}
-                </Typography>
-                <Button
-                  variant="contained"
-                  //color="primary"
-                  fullWidth
-                  onClick={handleEditButtonClick}
-                  style={{ marginTop: "20px" }}
-                >
-                  Edit
-                </Button>
-              </Container>
-
-              {/* <h2>{`${city.city}, ${city.country.country}`}</h2>
-              <button onClick={handleEditButtonClick}>Edit</button> */}
-            </>
+                Edit
+              </Button>
+            </Container>
           )}
         </div>
       ) : (

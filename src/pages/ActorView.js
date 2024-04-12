@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 
 import axios from "axios";
 
+//MUI Components
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+
 const ActorView = () => {
   const [actor, setActor] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -65,10 +76,28 @@ const ActorView = () => {
               </button>
             </form>
           ) : (
-            <>
-              <h2>{`${actor.first_name}${actor.last_name}`}</h2>
-              <button onClick={() => setEditMode(true)}>Edit</button>
-            </>
+            <Container
+              maxWidth="sm"
+              style={{
+                marginTop: "100px",
+                border: "1px solid #ccc",
+                padding: "20px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Name: ${actor.first_name} ${actor.last_name} `}
+              </Typography>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={() => setEditMode(true)}
+                style={{ marginTop: "20px" }}
+              >
+                Edit
+              </Button>
+            </Container>
           )}
         </div>
       ) : (

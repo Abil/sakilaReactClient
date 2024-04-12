@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI Components
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+
 const FilmView = () => {
   const [film, setFilm] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -175,19 +186,52 @@ const FilmView = () => {
               </button>
             </form>
           ) : (
-            <>
-              <h2>{`${film.title}`}</h2>
-              <h2>{`${film.description}`}</h2>
-              <h2>{`${film.release_year}, ${film.language.name}`}</h2>
-              <h2>{`${film.rental_duration}`}</h2>
-              <h2>{`${film.rental_rate}`}</h2>
-              <h2>{`${film.length}`}</h2>
-              <h2>{`${film.replacement_cost}`}</h2>
-              <h2>{`${film.rating}`}</h2>
-              <h2>{`${film.special_features}`}</h2>
-
-              <button onClick={handleEditButtonClick}>Edit</button>
-            </>
+            <Container
+              maxWidth="sm"
+              style={{
+                marginTop: "100px",
+                border: "1px solid #ccc",
+                padding: "20px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Title: ${film.title} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Description: ${film.description} `}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Year/Language: ${film.release_year}, ${film.language.name}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Rental Duration: ${film.rental_duration}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Rental Rate: ${film.rental_rate}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Running Time: ${film.length}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Replacement Cost: ${film.replacement_cost}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Rating: ${film.rating}`}
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                {`Special Features: ${film.special_features}`}
+              </Typography>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleEditButtonClick}
+                style={{ marginTop: "20px" }}
+              >
+                Edit
+              </Button>
+            </Container>
           )}
         </div>
       ) : (
