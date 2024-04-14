@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI
+import { Typography, Container, Button } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
 const Staff = () => {
   const [staffs, setStaffs] = useState([]);
   const [newFirstName, setNewFirstName] = useState("");
@@ -83,7 +97,7 @@ const Staff = () => {
     navigate(`./${id}`);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
@@ -142,92 +156,90 @@ const Staff = () => {
     <div>
       {!showCreateForm ? (
         <>
-          <h1>Staff Page</h1>
-          <h2>Staffs</h2>
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Staff
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name </TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Username</TableCell>
 
-          <ul>
-            {staffs.map((staff) => (
-              <li key={staff.staff_id}>
-                {/* {selectedStaffId === staff.staff_id ? (
-                  <>
-                    <input
-                      type="text"
-                      ref={newStaffNameRef}
-                      placeholder={staff.staff}
-                    />
-                    <button
-                      onClick={() => {
-                        handleUpdateStaff();
-                      }}
+                    <TableCell align="right" colSpan={3}>
+                      Options
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {staffs.map((staff, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      Done
-                    </button>
-                  </>
-                ) : ( */}
-                <>
-                  {`${staff.first_name}, ${staff.last_name}`}
-                  {`${staff.email}, ${staff.username}`}
-                  {/* {staff.staff} {staff.film.film} */}
-                  <button onClick={() => handleNavigateStaff(staff.staff_id)}>
-                    View
-                  </button>
-                  <button onClick={() => handleDeleteStaff(staff.staff_id)}>
-                    Delete
-                  </button>
-                  {/* <button
-                      onClick={() =>
-                        setSelectedStaffId(staff.staff_id)
-                      }
-                    >
-                      Edit
-                    </button> */}
-                </>
-                {/* )} */}
-              </li>
-            ))}
-          </ul>
-
-          {/* Pagination */}
-          <div>
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+                      <TableCell component="th" scope="row">
+                        {`${staff.first_name}, ${staff.last_name}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${staff.email}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${staff.username}`}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() => handleDeleteStaff(staff.staff_id)}
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          // color="secondary"
+                          fullWidth
+                          onClick={() => handleNavigateStaff(staff.staff_id)}
+                          style={{ marginTop: "20px" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
             >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              // Display only a subset of page numbers around the current page
-              if (
-                page === 1 ||
-                page === currentPage ||
-                page === totalPages ||
-                Math.abs(currentPage - page) <= 2
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(page)}
-                    disabled={currentPage === page}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          {/* <button onClick={() => setShowCreateForm(true)}>
-            Create New Staff
-          </button> */}
-          <button onClick={handleShowCreateForm}>Create New Staff</button>
+              <Fab
+                //onClick={() => setShowCreateForm(true)}
+                onClick={handleShowCreateForm}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
         </>
       ) : (
         <>

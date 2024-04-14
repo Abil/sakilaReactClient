@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+//MUI
+import { Typography, Container, Button } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
 const Actor = () => {
   const [actors, setActors] = useState([]);
   const [newActorFirstName, setNewActorFirstName] = useState("");
@@ -72,7 +86,7 @@ const Actor = () => {
     navigate(`./${id}`);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
@@ -80,93 +94,84 @@ const Actor = () => {
     <div>
       {!showCreateForm ? (
         <>
-          <h1>Actor Page</h1>
-          <h2>Actors</h2>
-
-          <ul>
-            {actors.map((actor) => (
-              <li key={actor.actor_id}>
-                {/* {selectedActorId === actor.actor_id ? (
-                  <>
-                    <input
-                      type="text"
-                      ref={newActorFirstNameRef}
-                      placeholder={actor.actor}
-                    />
-                    <button
-                      onClick={() => {
-                        handleUpdateActor();
-                      }}
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Actors
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>First Name </TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell align="right" colSpan={3}>
+                      Options
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {actors.map((actor, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      Done
-                    </button>
-                  </>
-                ) : ( */}
-                <>
-                  {`${actor.first_name}, ${actor.last_name}`}{" "}
-                  <button onClick={() => handleNavigateActor(actor.actor_id)}>
-                    View
-                  </button>
-                  <button onClick={() => handleDeleteActor(actor.actor_id)}>
-                    Delete
-                  </button>
-                  {/* <button onClick={() => setSelectedActorId(actor.actor_id)}>
-                      Edit
-                    </button> */}
-                </>
-                {/* )} */}
-              </li>
-            ))}
-          </ul>
-
-          {/* Pagination */}
-          {/* <div>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button key={i} onClick={() => handlePageChange(i + 1)}>
-                {i + 1}
-              </button>
-            ))}
-          </div> */}
-
-          <div>
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+                      <TableCell component="th" scope="row">
+                        {`${actor.first_name}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${actor.last_name}`}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() => handleDeleteActor(actor.actor_id)}
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          // color="secondary"
+                          fullWidth
+                          onClick={() => handleNavigateActor(actor.actor_id)}
+                          style={{ marginTop: "20px" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
             >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              // Display only a subset of page numbers around the current page
-              if (
-                page === 1 ||
-                page === currentPage ||
-                page === totalPages ||
-                Math.abs(currentPage - page) <= 2
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(page)}
-                    disabled={currentPage === page}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          <button onClick={() => setShowCreateForm(true)}>
-            Create New Actor
-          </button>
+              <Fab
+                onClick={() => setShowCreateForm(true)}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
         </>
       ) : (
         <>

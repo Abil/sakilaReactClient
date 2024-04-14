@@ -3,6 +3,20 @@ import { useState, useEffect, useRef } from "react";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI
+import { Typography, Container, Button } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
 const Store = () => {
   const [stores, setStores] = useState([]);
 
@@ -142,110 +156,67 @@ const Store = () => {
     <div>
       {!showCreateForm ? (
         <>
-          <h1>Store Page</h1>
-          <h2>Stores</h2>
-
-          <ul>
-            {stores.map((store) => (
-              <li key={store.store_id}>
-                {/* {selectedStoreId === store.store_id ? (
-                  <>
-                    <input
-                      type="text"
-                      ref={newStoreNameRef}
-                      placeholder={store.store}
-                    />
-                    <button
-                      onClick={() => {
-                        handleUpdateStore();
-                      }}
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Stores
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Store </TableCell>
+                    <TableCell>Manager</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {stores.map((store, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      Done
-                    </button>
-                  </>
-                ) : ( */}
-                <>
-                  {`${store.address.address}, `}
-                  {`${
-                    store.staffs.find((obj) => {
-                      return obj["staff_id"] == store["manager_staff_id"];
-                    })?.first_name
-                  }, ${
-                    store.staffs.find((obj) => {
-                      return obj["staff_id"] == store["manager_staff_id"];
-                    })?.last_name
-                  }`}
-
-                  {/* {console.log(
-                    "lo",
-                    store.staffs.find((obj) => {
-                      return obj["staff_id"] == store["manager_staff_id"];
-                    })
-                  )} */}
-
-                  {/* {store.store} {store.film.film} */}
-                  {/* <button onClick={() => handleNavigateStore(store.store_id)}>
-                    View
-                  </button> */}
-
-                  {/* Commented due to schema restriction in DB */}
-                  {/* <button onClick={() => handleDeleteStore(store.store_id)}>
-                    Delete
-                  </button> */}
-                  {/* <button
-                      onClick={() =>
-                        setSelectedStoreId(store.store_id)
-                      }
-                    >
-                      Edit
-                    </button> */}
-                </>
-                {/* )} */}
-              </li>
-            ))}
-          </ul>
-
-          {/* Pagination */}
-          <div>
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+                      <TableCell component="th" scope="row">
+                        {`${store.address.address}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${
+                          store.staffs.find((obj) => {
+                            return obj["staff_id"] == store["manager_staff_id"];
+                          })?.first_name
+                        }, ${
+                          store.staffs.find((obj) => {
+                            return obj["staff_id"] == store["manager_staff_id"];
+                          })?.last_name
+                        }`}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
             >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              // Display only a subset of page numbers around the current page
-              if (
-                page === 1 ||
-                page === currentPage ||
-                page === totalPages ||
-                Math.abs(currentPage - page) <= 2
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(page)}
-                    disabled={currentPage === page}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          {/* <button onClick={() => setShowCreateForm(true)}>
-            Create New Store
-          </button> */}
-          <button onClick={handleShowCreateForm}>Create New Store</button>
+              <Fab
+                onClick={() => setShowCreateForm(true)}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
         </>
       ) : (
         <>

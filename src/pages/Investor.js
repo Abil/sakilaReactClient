@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+//MUI
+import { Typography, Container, Button } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
 const Investor = () => {
   const [investors, setInvestors] = useState([]);
   const [newInvestorFirstName, setNewInvestorFirstName] = useState("");
@@ -84,97 +98,89 @@ const Investor = () => {
     <div>
       {!showCreateForm ? (
         <>
-          <h1>Investor Page</h1>
-          <h2>Investors</h2>
-
-          <ul>
-            {investors.map((investor) => (
-              <li key={investor.investor_id}>
-                {/* {selectedInvestorId === investor.investor_id ? (
-                  <>
-                    <input
-                      type="text"
-                      ref={newInvestorFirstNameRef}
-                      placeholder={investor.investor}
-                    />
-                    <button
-                      onClick={() => {
-                        handleUpdateInvestor();
-                      }}
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Investors
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>First Name </TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell align="right" colSpan={3}>
+                      Options
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {investors.map((investor, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      Done
-                    </button>
-                  </>
-                ) : ( */}
-                <>
-                  {`${investor.first_name}, ${investor.last_name}`}{" "}
-                  <button
-                    onClick={() => handleNavigateInvestor(investor.investor_id)}
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleDeleteInvestor(investor.investor_id)}
-                  >
-                    Delete
-                  </button>
-                  {/* <button onClick={() => setSelectedInvestorId(investor.investor_id)}>
-                      Edit
-                    </button> */}
-                </>
-                {/* )} */}
-              </li>
-            ))}
-          </ul>
-
-          {/* Pagination */}
-          {/* <div>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button key={i} onClick={() => handlePageChange(i + 1)}>
-                {i + 1}
-              </button>
-            ))}
-          </div> */}
-
-          <div>
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+                      <TableCell component="th" scope="row">
+                        {`${investor.first_name}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${investor.last_name}`}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleDeleteInvestor(investor.investor_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          // color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleNavigateInvestor(investor.investor_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
             >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              // Display only a subset of page numbers around the current page
-              if (
-                page === 1 ||
-                page === currentPage ||
-                page === totalPages ||
-                Math.abs(currentPage - page) <= 2
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(page)}
-                    disabled={currentPage === page}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          <button onClick={() => setShowCreateForm(true)}>
-            Create New Investor
-          </button>
+              <Fab
+                onClick={() => setShowCreateForm(true)}
+                //onClick={handleShowCreateForm}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
         </>
       ) : (
         <>

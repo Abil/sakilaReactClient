@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI
+import { Typography, Container, Button } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
 const Customer = () => {
   const [customers, setCustomers] = useState([]);
   const [newFirstName, setNewFirstName] = useState("");
@@ -83,7 +97,7 @@ const Customer = () => {
     navigate(`./${id}`);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
@@ -142,96 +156,93 @@ const Customer = () => {
     <div>
       {!showCreateForm ? (
         <>
-          <h1>Customer Page</h1>
-          <h2>Customers</h2>
-
-          <ul>
-            {customers.map((customer) => (
-              <li key={customer.customer_id}>
-                {/* {selectedCustomerId === customer.customer_id ? (
-                  <>
-                    <input
-                      type="text"
-                      ref={newCustomerNameRef}
-                      placeholder={customer.customer}
-                    />
-                    <button
-                      onClick={() => {
-                        handleUpdateCustomer();
-                      }}
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Customers
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name </TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell align="right" colSpan={3}>
+                      Options
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {customers.map((customer, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      Done
-                    </button>
-                  </>
-                ) : ( */}
-                <>
-                  {`${customer.first_name}, ${customer.last_name}`}
-                  {`${customer.email}, ${customer.active}`}
-                  {/* {customer.customer} {customer.film.film} */}
-                  <button
-                    onClick={() => handleNavigateCustomer(customer.customer_id)}
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleDeleteCustomer(customer.customer_id)}
-                  >
-                    Delete
-                  </button>
-                  {/* <button
-                      onClick={() =>
-                        setSelectedCustomerId(customer.customer_id)
-                      }
-                    >
-                      Edit
-                    </button> */}
-                </>
-                {/* )} */}
-              </li>
-            ))}
-          </ul>
-
-          {/* Pagination */}
-          <div>
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+                      <TableCell component="th" scope="row">
+                        {`${customer.first_name}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {`${customer.last_name}`}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {customer.active ? `Active` : `Inactive`}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleDeleteCustomer(customer.customer_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          // color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleNavigateCustomer(customer.customer_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
             >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              // Display only a subset of page numbers around the current page
-              if (
-                page === 1 ||
-                page === currentPage ||
-                page === totalPages ||
-                Math.abs(currentPage - page) <= 2
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(page)}
-                    disabled={currentPage === page}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
 
-          {/* <button onClick={() => setShowCreateForm(true)}>
-            Create New Customer
-          </button> */}
-          <button onClick={handleShowCreateForm}>Create New Customer</button>
+              <Fab
+                //onClick={() => setShowCreateForm(true)}
+                onClick={handleShowCreateForm}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
         </>
       ) : (
         <>

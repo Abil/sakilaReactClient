@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
+//MUI Components
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+
 const CustomerView = () => {
   const [customer, setCustomer] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -178,11 +189,41 @@ const CustomerView = () => {
             </form>
           ) : (
             <>
-              <h2>{`${customer.first_name}, ${customer.last_name}`}</h2>
-              <h2>{`${customer.email},  Active: ${!!customer.active}`}</h2>
-              <h2>{`${customer.address.address},  Store: ${customer.store.address.address}`}</h2>
+              <Container
+                maxWidth="sm"
+                style={{
+                  marginTop: "100px",
+                  border: "1px solid #ccc",
+                  padding: "20px",
+                  borderRadius: "5px",
+                }}
+              >
+                <Typography variant="h6" align="center" gutterBottom>
+                  {`Name: ${customer.first_name}, ${customer.last_name} `}
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {`Email: ${customer.email} `}
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {`Status: ${customer.active ? "Active" : "Inactive"}`}
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {`Address: ${customer.address.address}`}
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {`Store: ${customer.store.address.address}`}
+                </Typography>
 
-              <button onClick={handleEditButtonClick}>Edit</button>
+                <Button
+                  variant="contained"
+                  //color="primary"
+                  fullWidth
+                  onClick={handleEditButtonClick}
+                  style={{ marginTop: "20px" }}
+                >
+                  Edit
+                </Button>
+              </Container>
             </>
           )}
         </div>

@@ -3,6 +3,43 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+//MUI
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+  Box,
+} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Modal from "@mui/material/Modal";
+import Select from "@mui/material/Select";
+
+//MUI Box Style
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Language = () => {
   const [languages, setLanguages] = useState([]);
   const [newLanguageName, setNewLanguageName] = useState("");
@@ -73,6 +110,101 @@ const Language = () => {
     <div>
       {!showCreateForm ? (
         <>
+          <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+            <Typography variant="h2" align="center" gutterBottom>
+              Languages
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Language </TableCell>
+                    <TableCell align="right" colSpan={2}>
+                      Options
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {languages.map((language, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {`${language.name}`}
+                      </TableCell>
+
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          //color="primary"
+                          fullWidth
+                          onClick={() => {
+                            setSelectedLanguageId(language.language_id);
+                            //handleOpen();
+                          }}
+                          style={{ marginTop: "20px" }}
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          fullWidth
+                          onClick={() =>
+                            handleDeleteLanguage(language.language_id)
+                          }
+                          style={{ marginTop: "20px" }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      {/* <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          //color="primary"
+                          fullWidth
+                          onClick={() => {
+                            handleNavigateLanguage(language.language_id);
+                          }}
+                          style={{ marginTop: "20px" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell> */}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack
+              spacing={2}
+              style={{ marginTop: "50px", alignItems: "center" }}
+            >
+              <Pagination
+                count={totalPages}
+                color="primary"
+                onChange={handlePageChange}
+              />
+
+              <Fab
+                onClick={() => setShowCreateForm(true)}
+                //onClick={handleShowCreateForm}
+                color="primary"
+                aria-label="add"
+                style={{
+                  marginTop: "50px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Stack>
+          </Container>
+
           <h1>Language Page</h1>
           <h2>Languages</h2>
 
