@@ -47,8 +47,8 @@ const City = () => {
   const handleClose = () => setOpen(false);
   const [editedCityName, setEditedCityName] = useState("");
 
+  //MUI Selectbox
   const [selectedCountry, setSelectedCountry] = useState(0);
-
   const handleCountryChange = (event) => {
     setSelectedCountry(event.target.value);
   };
@@ -304,7 +304,7 @@ const City = () => {
                 debounceTimeout={300} // Debounce timeout in milliseconds
                 onChange={handleCountrySearch} // Handle input change event
                 element={TextField}
-                label="Search"
+                label="Search Countries"
                 variant="outlined"
                 margin="normal"
               />

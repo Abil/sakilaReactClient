@@ -43,6 +43,20 @@ const style = {
 };
 
 const Rental = () => {
+  //MUI Selectbox
+  const [selectedInventory, setSelectedInventory] = useState(0);
+  const handleInventoryChange = (event) => {
+    setSelectedInventory(event.target.value);
+  };
+  const [selectedStaff, setSelectedStaff] = useState(0);
+  const handleStaffChange = (event) => {
+    setSelectedStaff(event.target.value);
+  };
+  const [selectedCustomer, setSelectedCustomer] = useState(0);
+  const handleCustomerChange = (event) => {
+    setSelectedCustomer(event.target.value);
+  };
+
   const [rentals, setRentals] = useState([]);
   const [selectedRentalId, setSelectedRentalId] = useState(null);
 
@@ -128,6 +142,8 @@ const Rental = () => {
     try {
       const response = await axios.get("/inventory/instock");
       setInventory(response.data.inventories);
+      setSelectedInventory(response.data.inventories[0]["inventory_id"]);
+      console.log("inventory:", response.data);
     } catch (error) {
       console.error("Error fetching inventory:", error);
     }
@@ -137,6 +153,9 @@ const Rental = () => {
     try {
       const response = await axios.get("/staff");
       setStaff(response.data.staff);
+      setSelectedStaff(response.data.staff[0]["staff_id"]);
+
+      console.log("staff:", response.data);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -146,6 +165,9 @@ const Rental = () => {
     try {
       const response = await axios.get("/customer");
       setCustomer(response.data.customers);
+      setSelectedCustomer(response.data.customers[0]["customer_id"]);
+
+      console.log("customers:", response.data);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -158,6 +180,7 @@ const Rental = () => {
       );
       console.log("inventory:", response.data);
       setInventory(response.data);
+      setSelectedInventory(response.data[0]["inventory_id"]);
     } catch (error) {
       console.error("Error searching inventory:", error);
       return [];
@@ -171,6 +194,7 @@ const Rental = () => {
       );
       console.log("staff:", response.data);
       setStaff(response.data);
+      setSelectedStaff(response.data[0]["staff_id"]);
     } catch (error) {
       console.error("Error searching inventory:", error);
       return [];
@@ -184,6 +208,7 @@ const Rental = () => {
       );
       console.log("customer:", response.data);
       setCustomer(response.data);
+      setSelectedCustomer(response.data[0]["customer_id"]);
     } catch (error) {
       console.error("Error searching inventory:", error);
       return [];
@@ -229,7 +254,7 @@ const Rental = () => {
                         {`${rental.customer.email}`}
                       </TableCell>
 
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           //color="primary"
@@ -242,7 +267,7 @@ const Rental = () => {
                         >
                           Edit
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <Button
                           variant="contained"
@@ -283,8 +308,8 @@ const Rental = () => {
               />
 
               <Fab
-                onClick={() => setShowCreateForm(true)}
-                //onClick={handleShowCreateForm}
+                //onClick={() => setShowCreateForm(true)}
+                onClick={handleShowCreateForm}
                 color="primary"
                 aria-label="add"
                 style={{
@@ -298,7 +323,7 @@ const Rental = () => {
             </Stack>
           </Container>
 
-          <h1>Rental Page</h1>
+          {/* <h1>Rental Page</h1>
           <h2>Rentals</h2>
 
           <ul>
@@ -327,7 +352,7 @@ const Rental = () => {
                     onClick={() => handleNavigateRental(rental.rental_id)}
                   >
                     View
-                  </button> */}
+                  </button> 
                     <button
                       onClick={() => handleDeleteRental(rental.rental_id)}
                     >
@@ -345,10 +370,10 @@ const Rental = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
-          <div>
+          {/* <div>
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
@@ -382,17 +407,140 @@ const Rental = () => {
             >
               Next
             </button>
-          </div>
+          </div> */}
 
           {/* <button onClick={() => setShowCreateForm(true)}>
             Create New Rental
           </button> */}
-          <button onClick={handleShowCreateForm}>Create New Rental</button>
+          {/* <button onClick={handleShowCreateForm}>Create New Rental</button> */}
         </>
       ) : (
         <>
-          <h2>Create Rental</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Rental
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleStaffSearch} // Handle input change event
+                element={TextField}
+                label="Search Staff"
+                variant="outlined"
+                margin="normal"
+              />
 
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedStaff}
+                onChange={handleStaffChange}
+                //onChange={handleChange}
+              >
+                {staff.map((staff) => (
+                  <MenuItem
+                    value={staff.staff_id}
+                  >{`${staff.first_name} ${staff.last_name}`}</MenuItem>
+                ))}
+              </Select>
+
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleInventorySearch} // Handle input change event
+                element={TextField}
+                label="Search Address"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedInventory}
+                onChange={handleInventoryChange}
+                //onChange={handleChange}
+              >
+                {inventory.map((inventory) => (
+                  <MenuItem value={inventory.inventory_id}>
+                    {inventory.film.title}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleCustomerSearch} // Handle input change event
+                element={TextField}
+                label="Search Customer"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedCustomer}
+                onChange={handleCustomerChange}
+                //onChange={handleChange}
+              >
+                {customer.map((customer) => (
+                  <MenuItem value={customer.customer_id}>
+                    {`${customer.email}`}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateRental}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Rental</h2>
           <DebounceInput
             type="text"
             placeholder="Search..."
@@ -400,7 +548,6 @@ const Rental = () => {
             debounceTimeout={300} // Debounce timeout in milliseconds
             onChange={handleInventorySearch} // Handle input change event
           />
-
           <select ref={inventoryRef}>
             {inventory.map((inventory) => (
               <option
@@ -411,7 +558,6 @@ const Rental = () => {
               </option>
             ))}
           </select>
-
           <DebounceInput
             type="text"
             placeholder="Search..."
@@ -419,7 +565,6 @@ const Rental = () => {
             debounceTimeout={300} // Debounce timeout in milliseconds
             onChange={handleStaffSearch} // Handle input change event
           />
-
           <select ref={staffRef}>
             {staff.map((staff) => (
               <option key={staff.staff_id} value={staff.staff_id}>
@@ -427,7 +572,6 @@ const Rental = () => {
               </option>
             ))}
           </select>
-
           <DebounceInput
             type="text"
             placeholder="Search..."
@@ -435,7 +579,6 @@ const Rental = () => {
             debounceTimeout={300} // Debounce timeout in milliseconds
             onChange={handleCustomerSearch} // Handle input change event
           />
-
           <select ref={customerRef}>
             {customer.map((customer) => (
               <option key={customer.customer_id} value={customer.customer_id}>
@@ -443,15 +586,15 @@ const Rental = () => {
               </option>
             ))}
           </select>
-
           {/* <DatePicker
             //selected={newRentalDate}
             //onChange={setNewRentalDate}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select a date"
           /> */}
-          <button onClick={handleCreateRental}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          {/* <button onClick={handleCreateRental}>Create</button> */}
+          {/* <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
+          {/* <button onClick={handleShowCreateForm}>Cancel</button> */}
         </>
       )}
     </div>

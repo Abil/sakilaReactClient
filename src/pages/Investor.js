@@ -4,7 +4,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+  Box,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -138,7 +146,7 @@ const Investor = () => {
                           Delete
                         </Button>
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           // color="secondary"
@@ -150,7 +158,7 @@ const Investor = () => {
                         >
                           View
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -184,7 +192,66 @@ const Investor = () => {
         </>
       ) : (
         <>
-          <h2>Create Investor</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Investor
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newInvestorFirstName}
+                onChange={(e) => setNewInvestorFirstName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                variant="outlined"
+                margin="normal"
+                value={newInvestorLastName}
+                onChange={(e) => setNewInvestorLastName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Company Name"
+                variant="outlined"
+                margin="normal"
+                value={newCompanyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateInvestor}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/*<h2>Create Investor</h2>
           <input
             type="text"
             value={newInvestorFirstName}
@@ -205,7 +272,7 @@ const Investor = () => {
             placeholder="Enter investor company name"
           />
           <button onClick={handleCreateInvestor}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

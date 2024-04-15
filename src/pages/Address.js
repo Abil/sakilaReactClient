@@ -4,7 +4,14 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,8 +23,15 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/material/Select";
 
 const Address = () => {
+  //MUI Selectbox
+  const [selectedCity, setSelectedCity] = useState(0);
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+  };
+
   const [addresses, setAddresses] = useState([]);
   const [newAddress, setNewAddress] = useState("");
   const [newAddressLine2, setNewAddressLine2] = useState("");
@@ -100,6 +114,7 @@ const Address = () => {
     try {
       const response = await axios.get("/city");
       setCities(response.data.cities);
+      setSelectedCity(response.data.cities[0]["city_id"]);
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
@@ -112,6 +127,7 @@ const Address = () => {
       );
       //console.log("cities:", response.data);
       setCities(response.data);
+      setSelectedCity(response.data[0]["city_id"]);
     } catch (error) {
       console.error("Error searching cities:", error);
       return [];
@@ -213,7 +229,110 @@ const Address = () => {
         </>
       ) : (
         <>
-          <h2>Create Address</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Address
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleCitySearch} // Handle input change event
+                element={TextField}
+                label="Search Cities"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedCity}
+                onChange={handleCityChange}
+                //onChange={handleChange}
+              >
+                {cities.map((city) => (
+                  <MenuItem value={city.city_id}>{city.city}</MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                fullWidth
+                label="Address Line 1"
+                variant="outlined"
+                margin="normal"
+                value={newAddress}
+                onChange={(e) => setNewAddress(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Address Line 2"
+                variant="outlined"
+                margin="normal"
+                value={newAddressLine2}
+                onChange={(e) => setNewAddressLine2(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="District"
+                variant="outlined"
+                margin="normal"
+                value={newDistrict}
+                onChange={(e) => setNewDistrict(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Postal Code"
+                variant="outlined"
+                margin="normal"
+                value={newPostalcode}
+                onChange={(e) => setNewPostalcode(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Phone"
+                variant="outlined"
+                margin="normal"
+                value={newPhone}
+                onChange={(e) => setNewPhone(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateAddress}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Address</h2>
 
           <DebounceInput
             type="text"
@@ -263,7 +382,7 @@ const Address = () => {
             placeholder="Enter phone"
           />
           <button onClick={handleCreateAddress}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

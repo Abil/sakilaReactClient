@@ -103,7 +103,7 @@ const InvestorView = () => {
                 {`Company: ${investor.company_name} `}
               </Typography>
 
-              <Button
+              {/* <Button
                 variant="contained"
                 //color="primary"
                 fullWidth
@@ -111,7 +111,7 @@ const InvestorView = () => {
                 style={{ marginTop: "20px" }}
               >
                 Edit
-              </Button>
+              </Button> */}
             </Container>
           )}
         </div>

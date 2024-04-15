@@ -134,7 +134,7 @@ const Language = () => {
                         {`${language.name}`}
                       </TableCell>
 
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           //color="primary"
@@ -147,7 +147,7 @@ const Language = () => {
                         >
                           Edit
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <Button
                           variant="contained"
@@ -205,7 +205,7 @@ const Language = () => {
             </Stack>
           </Container>
 
-          <h1>Language Page</h1>
+          {/* <h1>Language Page</h1>
           <h2>Languages</h2>
 
           <ul>
@@ -252,7 +252,7 @@ const Language = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
           {/* <div>
@@ -263,7 +263,7 @@ const Language = () => {
             ))}
           </div> */}
 
-          <div>
+          {/* <div>
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
@@ -301,11 +301,54 @@ const Language = () => {
 
           <button onClick={() => setShowCreateForm(true)}>
             Create New Language
-          </button>
+          </button> */}
         </>
       ) : (
         <>
-          <h2>Create Language</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Language
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="Language Name"
+                variant="outlined"
+                margin="normal"
+                value={newLanguageName}
+                onChange={(e) => setNewLanguageName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateLanguage}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Language</h2>
           <input
             type="text"
             value={newLanguageName}
@@ -313,7 +356,7 @@ const Language = () => {
             placeholder="Enter language name"
           />
           <button onClick={handleCreateLanguage}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

@@ -4,7 +4,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  MenuItem,
+  FormControl,
+  Box,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -123,7 +133,7 @@ const Advisor = () => {
                           Delete
                         </Button>
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           // color="secondary"
@@ -135,7 +145,7 @@ const Advisor = () => {
                         >
                           View
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -169,7 +179,71 @@ const Advisor = () => {
         </>
       ) : (
         <>
-          <h2>Create Advisor</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Advisor
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newAdvisorFirstName}
+                onChange={(e) => setNewAdvisorFirstName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                variant="outlined"
+                margin="normal"
+                value={newAdvisorLastName}
+                onChange={(e) => setNewAdvisorLastName(e.target.value)}
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    fullWidth
+                    variant="outlined"
+                    margin="normal"
+                    //value={newCompanyName}
+                    onChange={(e) => setIsChairman(e.target.checked)}
+                  />
+                }
+                label="Chairman"
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateAdvisor}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Advisor</h2>
           <input
             type="text"
             value={newAdvisorFirstName}
@@ -190,7 +264,7 @@ const Advisor = () => {
             placeholder="Enter advisor chairman status"
           />
           <button onClick={handleCreateAdvisor}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

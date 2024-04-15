@@ -4,7 +4,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -175,7 +182,58 @@ const Actor = () => {
         </>
       ) : (
         <>
-          <h2>Create Actor</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Actor
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newActorFirstName}
+                onChange={(e) => setNewActorFirstName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                variant="outlined"
+                margin="normal"
+                value={newActorLastName}
+                onChange={(e) => setNewActorLastName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateActor}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Actor</h2>
           <input
             type="text"
             value={newActorFirstName}
@@ -189,7 +247,7 @@ const Actor = () => {
             placeholder="Enter actor second name"
           />
           <button onClick={handleCreateActor}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

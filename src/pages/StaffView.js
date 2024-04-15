@@ -213,7 +213,7 @@ const StaffView = () => {
                 {`Store: ${staff.store.address.address}`}
               </Typography>
 
-              <Button
+              {/* <Button
                 variant="contained"
                 //color="primary"
                 fullWidth
@@ -221,7 +221,7 @@ const StaffView = () => {
                 style={{ marginTop: "20px" }}
               >
                 Edit
-              </Button>
+              </Button> */}
             </Container>
           )}
         </div>

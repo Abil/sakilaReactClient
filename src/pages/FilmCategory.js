@@ -3,7 +3,39 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+//MUI
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/material/Select";
+
 const FilmCategory = () => {
+  //MUI Selectbox
+  const [selectedFilm, setSelectedFilm] = useState(0);
+  const handleFilmChange = (event) => {
+    setSelectedFilm(event.target.value);
+  };
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
   const [filmCategories, setFilmCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,6 +58,7 @@ const FilmCategory = () => {
     try {
       const response = await axios.get(`/film`);
       setFilms(response.data.films);
+      setSelectedFilm(response.data.films[0]["film_id"]);
     } catch (error) {
       console.error("Error fetching films:", error);
     }
@@ -70,7 +103,7 @@ const FilmCategory = () => {
     }
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
@@ -78,6 +111,7 @@ const FilmCategory = () => {
     try {
       const response = await axios.get("/film");
       setFilms(response.data.films);
+      setSelectedFilm(response.data.films[0]["film_id"]);
     } catch (error) {
       console.error("Error fetching films:", error);
     }
@@ -87,6 +121,7 @@ const FilmCategory = () => {
     try {
       const response = await axios.get("/category");
       setCategories(response.data.categories);
+      setSelectedCategory(response.data.categories[0]["category_id"]);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -99,6 +134,7 @@ const FilmCategory = () => {
       );
       console.log("films:", response.data);
       setFilms(response.data);
+      setSelectedFilm(response.data[0]["film_id"]);
     } catch (error) {
       console.error("Error searching films:", error);
       return [];
@@ -112,6 +148,7 @@ const FilmCategory = () => {
       );
       console.log("categories:", response.data);
       setCategories(response.data);
+      setSelectedCategory(response.data[0]["category_id"]);
     } catch (error) {
       console.error("Error searching categories:", error);
       return [];
@@ -131,140 +168,230 @@ const FilmCategory = () => {
 
   return (
     <div>
-      <h1>FilmCategory Page</h1>
-
-      <DebounceInput
-        type="text"
-        placeholder="Search..."
-        minLength={2} // Minimum number of characters before debounce triggers
-        debounceTimeout={300} // Debounce timeout in milliseconds
-        onChange={handleFilmSearch} // Handle input change event
-      />
-
-      <select ref={filmRef}>
-        {films.map((film) => (
-          <option key={film.film_id} value={film.film_id}>
-            {film.title}
-          </option>
-        ))}
-      </select>
-
-      <button onClick={() => handleFetchFilmCategories()}>
-        Fetch Categories
-      </button>
-
       {!showCreateForm ? (
         <>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Search Film
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleFilmSearch} // Handle input change event
+                element={TextField}
+                label="Search Films"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedFilm}
+                onChange={handleFilmChange}
+                //onChange={handleChange}
+              >
+                {films.map((film) => (
+                  <MenuItem value={film.film_id}>{film.title}</MenuItem>
+                ))}
+              </Select>
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleFetchFilmCategories}
+                style={{ marginTop: "20px" }}
+              >
+                Fetch Categories
+              </Button>
+            </FormControl>
+            <Fab
+              alignItems="center"
+              //onClick={() => setShowCreateForm(true)}
+              onClick={handleShowCreateForm}
+              color="primary"
+              aria-label="add"
+              style={{
+                marginTop: "50px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Container>
           {showFilmList && (
             <>
-              <h2>FilmCategories</h2>{" "}
-              <ul>
-                {filmCategories.map((filmCategory) => (
-                  <li key={filmCategory.category_id}>
-                    <>
-                      {`${filmCategory.name}`}
+              <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+                <Typography variant="h2" align="center" gutterBottom>
+                  Categories
+                </Typography>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Actors </TableCell>
 
-                      <button
-                        onClick={() =>
-                          handleDeleteFilmCategory(filmCategory.category_id)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </>
-                  </li>
-                ))}
-              </ul>
-              {/* Pagination */}
-              <div>
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
+                        <TableCell align="right" colSpan={1}>
+                          Option
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filmCategories.map((filmCategory, index) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {`${filmCategory.name}`}{" "}
+                          </TableCell>
+
+                          <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              fullWidth
+                              onClick={() =>
+                                handleDeleteFilmCategory(
+                                  filmCategory.category_id
+                                )
+                              }
+                              style={{ marginTop: "20px" }}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                          {/* <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              // color="secondary"
+                              fullWidth
+                              onClick={() => handleNavigateFilm(film.film_id)}
+                              style={{ marginTop: "20px" }}
+                            >
+                              View
+                            </Button>
+                          </TableCell> */}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Stack
+                  spacing={2}
+                  style={{ marginTop: "50px", alignItems: "center" }}
                 >
-                  Prev
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => {
-                  const page = i + 1;
-                  // Display only a subset of page numbers around the current page
-                  if (
-                    page === 1 ||
-                    page === currentPage ||
-                    page === totalPages ||
-                    Math.abs(currentPage - page) <= 2
-                  ) {
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handlePageChange(page)}
-                        disabled={currentPage === page}
-                      >
-                        {page}
-                      </button>
-                    );
-                  }
-                  return null;
-                })}
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </div>
+                  <Pagination
+                    count={totalPages}
+                    color="primary"
+                    onChange={handlePageChange}
+                  />
+
+                  {/* <Fab
+                    //onClick={() => setShowCreateForm(true)}
+                    onClick={handleShowCreateForm}
+                    color="primary"
+                    aria-label="add"
+                    style={{
+                      marginTop: "50px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <AddIcon />
+                  </Fab> */}
+                </Stack>
+              </Container>
             </>
           )}
-
-          {/* <button onClick={() => setShowCreateForm(true)}>
-            Create New FilmCategory
-          </button> */}
-          <button onClick={handleShowCreateForm}>
-            Create New FilmCategory
-          </button>
         </>
       ) : (
         <>
-          <h2>Create FilmCategory</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Associate Category
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleCategorySearch} // Handle input change event
+                element={TextField}
+                label="Search Category"
+                variant="outlined"
+                margin="normal"
+              />
 
-          {/* <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleFilmSearch} // Handle input change event
-          />
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                //onChange={handleChange}
+              >
+                {categories.map((category) => (
+                  <MenuItem
+                    value={category.category_id}
+                  >{`${category.name}`}</MenuItem>
+                ))}
+              </Select>
 
-          <select ref={filmRef}>
-            {films.map((film) => (
-              <option key={film.film_id} value={film.film_id}>
-                {film.title}
-              </option>
-            ))}
-          </select> */}
-
-          <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleCategorySearch} // Handle input change event
-          />
-
-          <select ref={categoryRef}>
-            {categories.map((category) => (
-              <option key={category.category_id} value={category.category_id}>
-                {`${category.name}`}
-              </option>
-            ))}
-          </select>
-
-          {/* <input
-            type="text"
-            value={newFilmCategoryName}
-            onChange={(e) => setNewFilmCategoryName(e.target.value)}
-            placeholder="Enter filmCategory name"
-          /> */}
-          <button onClick={handleCreateFilmCategory}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateFilmCategory}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
         </>
       )}
     </div>

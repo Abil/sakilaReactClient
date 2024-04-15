@@ -3,7 +3,39 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+//MUI
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/material/Select";
+
 const FilmActor = () => {
+  //MUI Selectbox
+  const [selectedFilm, setSelectedFilm] = useState(0);
+  const handleFilmChange = (event) => {
+    setSelectedFilm(event.target.value);
+  };
+  const [selectedActor, setSelectedActor] = useState(0);
+  const handleActorChange = (event) => {
+    setSelectedActor(event.target.value);
+  };
+
   const [filmActors, setFilmActors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,6 +58,7 @@ const FilmActor = () => {
     try {
       const response = await axios.get(`/film`);
       setFilms(response.data.films);
+      setSelectedFilm(response.data.films[0]["film_id"]);
     } catch (error) {
       console.error("Error fetching films:", error);
     }
@@ -33,7 +66,9 @@ const FilmActor = () => {
 
   const fetchFilmActors = async () => {
     try {
-      const response = await axios.get(`/film-actor/${filmRef.current.value}`);
+      //const response = await axios.get(`/film-actor/${filmRef.current.value}`);
+      const response = await axios.get(`/film-actor/${selectedFilm}`);
+
       setFilmActors(response.data.actors);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -66,7 +101,7 @@ const FilmActor = () => {
     }
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (e, page) => {
     setCurrentPage(page);
   };
 
@@ -74,6 +109,7 @@ const FilmActor = () => {
     try {
       const response = await axios.get("/film");
       setFilms(response.data.films);
+      setSelectedFilm(response.data.films[0]["film_id"]);
     } catch (error) {
       console.error("Error fetching films:", error);
     }
@@ -83,6 +119,7 @@ const FilmActor = () => {
     try {
       const response = await axios.get("/actor");
       setActors(response.data.actors);
+      setSelectedActor(response.data.actors[0]["actor_id"]);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -95,6 +132,7 @@ const FilmActor = () => {
       );
       console.log("films:", response.data);
       setFilms(response.data);
+      setSelectedFilm(response.data[0]["film_id"]);
     } catch (error) {
       console.error("Error searching films:", error);
       return [];
@@ -108,6 +146,7 @@ const FilmActor = () => {
       );
       console.log("actors:", response.data);
       setActors(response.data);
+      setSelectedActor(response.data[0]["actor_id"]);
     } catch (error) {
       console.error("Error searching actors:", error);
       return [];
@@ -127,136 +166,228 @@ const FilmActor = () => {
 
   return (
     <div>
-      <h1>FilmActor Page</h1>
-
-      <DebounceInput
-        type="text"
-        placeholder="Search..."
-        minLength={2} // Minimum number of characters before debounce triggers
-        debounceTimeout={300} // Debounce timeout in milliseconds
-        onChange={handleFilmSearch} // Handle input change event
-      />
-
-      <select ref={filmRef}>
-        {films.map((film) => (
-          <option key={film.film_id} value={film.film_id}>
-            {film.title}
-          </option>
-        ))}
-      </select>
-
-      <button onClick={() => handleFetchFilmActors()}>Fetch Actors</button>
-
       {!showCreateForm ? (
         <>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Search Film
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleFilmSearch} // Handle input change event
+                element={TextField}
+                label="Search Films"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedFilm}
+                onChange={handleFilmChange}
+                //onChange={handleChange}
+              >
+                {films.map((film) => (
+                  <MenuItem value={film.film_id}>{film.title}</MenuItem>
+                ))}
+              </Select>
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleFetchFilmActors}
+                style={{ marginTop: "20px" }}
+              >
+                Fetch Actors
+              </Button>
+            </FormControl>
+            <Fab
+              alignItems="center"
+              //onClick={() => setShowCreateForm(true)}
+              onClick={handleShowCreateForm}
+              color="primary"
+              aria-label="add"
+              style={{
+                marginTop: "50px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Container>
           {showFilmList && (
             <>
-              <h2>FilmActors</h2>{" "}
-              <ul>
-                {filmActors.map((filmActor) => (
-                  <li key={filmActor.actor_id}>
-                    <>
-                      {`${filmActor.first_name}, ${filmActor.last_name}`}
+              <Container maxWidth="lg" style={{ marginTop: "50px" }}>
+                <Typography variant="h2" align="center" gutterBottom>
+                  Actors
+                </Typography>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Actors </TableCell>
 
-                      <button
-                        onClick={() =>
-                          handleDeleteFilmActor(filmActor.actor_id)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </>
-                  </li>
-                ))}
-              </ul>
-              {/* Pagination */}
-              <div>
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
+                        <TableCell align="right" colSpan={1}>
+                          Option
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filmActors.map((filmActor, index) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {`${filmActor.first_name}, ${filmActor.last_name}`}{" "}
+                          </TableCell>
+
+                          <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              fullWidth
+                              onClick={() =>
+                                handleDeleteFilmActor(filmActor.actor_id)
+                              }
+                              style={{ marginTop: "20px" }}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                          {/* <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              // color="secondary"
+                              fullWidth
+                              onClick={() => handleNavigateFilm(film.film_id)}
+                              style={{ marginTop: "20px" }}
+                            >
+                              View
+                            </Button>
+                          </TableCell> */}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Stack
+                  spacing={2}
+                  style={{ marginTop: "50px", alignItems: "center" }}
                 >
-                  Prev
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => {
-                  const page = i + 1;
-                  // Display only a subset of page numbers around the current page
-                  if (
-                    page === 1 ||
-                    page === currentPage ||
-                    page === totalPages ||
-                    Math.abs(currentPage - page) <= 2
-                  ) {
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handlePageChange(page)}
-                        disabled={currentPage === page}
-                      >
-                        {page}
-                      </button>
-                    );
-                  }
-                  return null;
-                })}
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </div>
+                  <Pagination
+                    count={totalPages}
+                    color="primary"
+                    onChange={handlePageChange}
+                  />
+
+                  {/* <Fab
+                    //onClick={() => setShowCreateForm(true)}
+                    onClick={handleShowCreateForm}
+                    color="primary"
+                    aria-label="add"
+                    style={{
+                      marginTop: "50px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <AddIcon />
+                  </Fab> */}
+                </Stack>
+              </Container>
             </>
           )}
-
-          {/* <button onClick={() => setShowCreateForm(true)}>
-            Create New FilmActor
-          </button> */}
-          <button onClick={handleShowCreateForm}>Create New FilmActor</button>
         </>
       ) : (
         <>
-          <h2>Create FilmActor</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Associate Actor
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleActorSearch} // Handle input change event
+                element={TextField}
+                label="Search Actor"
+                variant="outlined"
+                margin="normal"
+              />
 
-          {/* <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleFilmSearch} // Handle input change event
-          />
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedActor}
+                onChange={handleActorChange}
+                //onChange={handleChange}
+              >
+                {actors.map((actor) => (
+                  <MenuItem
+                    value={actor.actor_id}
+                  >{`${actor.first_name}, ${actor.last_name}`}</MenuItem>
+                ))}
+              </Select>
 
-          <select ref={filmRef}>
-            {films.map((film) => (
-              <option key={film.film_id} value={film.film_id}>
-                {film.title}
-              </option>
-            ))}
-          </select> */}
-
-          <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleActorSearch} // Handle input change event
-          />
-
-          <select ref={actorRef}>
-            {actors.map((actor) => (
-              <option key={actor.actor_id} value={actor.actor_id}>
-                {`${actor.first_name}, ${actor.last_name}`}
-              </option>
-            ))}
-          </select>
-
-          {/* <input
-            type="text"
-            value={newFilmActorName}
-            onChange={(e) => setNewFilmActorName(e.target.value)}
-            placeholder="Enter filmActor name"
-          /> */}
-          <button onClick={handleCreateFilmActor}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateFilmActor}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
         </>
       )}
     </div>

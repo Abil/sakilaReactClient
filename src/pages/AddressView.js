@@ -176,15 +176,15 @@ const AddressView = () => {
               <Typography variant="h6" align="center" gutterBottom>
                 {`Phone: ${address.phone}`}
               </Typography>
-              <Button
+              {/* <Button
                 variant="contained"
                 //color="primary"
                 fullWidth
                 onClick={handleEditButtonClick}
                 style={{ marginTop: "20px" }}
-              >
+              >s
                 Edit
-              </Button>
+              </Button> */}
             </Container>
           )}
         </div>

@@ -188,7 +188,7 @@ const Inventory = () => {
                           Delete
                         </Button>
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           // color="secondary"
@@ -200,7 +200,7 @@ const Inventory = () => {
                         >
                           View
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>

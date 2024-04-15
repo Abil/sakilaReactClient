@@ -105,7 +105,7 @@ const AdvisorView = () => {
                 {`Chairman: ${advisor.is_chairmain ? `True` : `False`} `}
               </Typography>
 
-              <Button
+              {/* <Button
                 variant="contained"
                 //color="primary"
                 fullWidth
@@ -113,7 +113,7 @@ const AdvisorView = () => {
                 style={{ marginTop: "20px" }}
               >
                 Edit
-              </Button>
+              </Button> */}
             </Container>
           )}
         </div>

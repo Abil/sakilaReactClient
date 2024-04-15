@@ -88,7 +88,7 @@ const ActorView = () => {
               <Typography variant="h6" align="center" gutterBottom>
                 {`Name: ${actor.first_name} ${actor.last_name} `}
               </Typography>
-              <Button
+              {/* <Button
                 variant="contained"
                 //color="primary"
                 fullWidth
@@ -96,7 +96,7 @@ const ActorView = () => {
                 style={{ marginTop: "20px" }}
               >
                 Edit
-              </Button>
+              </Button> */}
             </Container>
           )}
         </div>

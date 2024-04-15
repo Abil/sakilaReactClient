@@ -4,6 +4,8 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+//import DatePicker from "react-date-picker";
+//import "react-date-picker/dist/DatePicker.css";
 
 //MUI
 import {
@@ -43,6 +45,19 @@ const style = {
 };
 
 const Payment = () => {
+  //MUI Selectbox
+  const [selectedRental, setSelectedRental] = useState(0);
+  const handleRentalChange = (event) => {
+    setSelectedRental(event.target.value);
+  };
+  const [selectedStaff, setSelectedStaff] = useState(0);
+  const handleStaffChange = (event) => {
+    setSelectedStaff(event.target.value);
+  };
+  const [selectedCustomer, setSelectedCustomer] = useState(0);
+  const handleCustomerChange = (event) => {
+    setSelectedCustomer(event.target.value);
+  };
   const [payments, setPayments] = useState([]);
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
   const [selectedPaymentRentalId, setSelectedpaymentRentalId] = useState(null);
@@ -142,7 +157,9 @@ const Payment = () => {
   const handleFetchRental = async () => {
     try {
       const response = await axios.get("/rental/unreturned");
+      console.log("Rentals: ", response.data);
       setRental(response.data);
+      setSelectedRental(response.data[0]["rental_id"]);
     } catch (error) {
       console.error("Error fetching rental:", error);
     }
@@ -152,6 +169,7 @@ const Payment = () => {
     try {
       const response = await axios.get("/staff");
       setStaff(response.data.staff);
+      setSelectedStaff(response.data.staff[0]["staff_id"]);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -161,6 +179,7 @@ const Payment = () => {
     try {
       const response = await axios.get("/customer");
       setCustomer(response.data.customers);
+      setSelectedCustomer(response.data.customers[0]["customer_id"]);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -168,9 +187,10 @@ const Payment = () => {
 
   // const handleRentalSearch = async (inputValue) => {
   //   try {
-  //     const response = await axios.get(
-  //       `/rental/unreturned?query=${inputValue.target.value}`
-  //     );
+  //     // const response = await axios.get(
+  //     //   `/rental/unreturned?query=${inputValue.target.value}`
+  //     // );
+  //     const response = await axios.get(`/rental/unreturned`);
   //     console.log("rental:", response.data);
   //     setRental(response.data);
   //   } catch (error) {
@@ -186,6 +206,7 @@ const Payment = () => {
       );
       console.log("staff:", response.data);
       setStaff(response.data);
+      setSelectedStaff(response.data[0]["staff_id"]);
     } catch (error) {
       console.error("Error searching rental:", error);
       return [];
@@ -199,6 +220,7 @@ const Payment = () => {
       );
       console.log("customer:", response.data);
       setCustomer(response.data);
+      setSelectedCustomer(response.data[0]["customer_id"]);
     } catch (error) {
       console.error("Error searching rental:", error);
       return [];
@@ -206,6 +228,7 @@ const Payment = () => {
   };
 
   const handleShowCreateForm = () => {
+    console.log("handle shoe create form");
     handleFetchRental(); // Fetch rental when creating a new rental
     handleFetchStaffs(); // Fetch staff when creating a new rental
     handleFetchCustomer();
@@ -235,7 +258,9 @@ const Payment = () => {
                   {payments.map((payment, index) => (
                     <TableRow
                       key={index}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
                     >
                       <TableCell component="th" scope="row">
                         {`${payment.customer.email}`}
@@ -244,7 +269,7 @@ const Payment = () => {
                         {`${payment.rental.inventory.film.title}`}
                       </TableCell>
 
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           //color="primary"
@@ -257,7 +282,7 @@ const Payment = () => {
                         >
                           Edit
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <Button
                           variant="contained"
@@ -300,8 +325,8 @@ const Payment = () => {
               />
 
               <Fab
-                onClick={() => setShowCreateForm(true)}
-                //onClick={handleShowCreateForm}
+                //onClick={() => setShowCreateForm(true)}
+                onClick={handleShowCreateForm}
                 color="primary"
                 aria-label="add"
                 style={{
@@ -315,7 +340,7 @@ const Payment = () => {
             </Stack>
           </Container>
 
-          <h1>Payment Page</h1>
+          {/* <h1>Payment Page</h1>
           <h2>Payments</h2>
 
           <ul>
@@ -329,6 +354,7 @@ const Payment = () => {
                       placeholder={payment.amount}
                     />
                     <DatePicker
+                      style={{ width: "100%" }}
                       selected={paymentDate}
                       onChange={setPaymentDate}
                       dateFormat="dd/MM/yyyy"
@@ -349,7 +375,7 @@ const Payment = () => {
                     onClick={() => handleNavigatePayment(payment.payment_id)}
                   >
                     View
-                  </button> */}
+                  </button> 
                     <button
                       onClick={() => handleDeletePayment(payment.payment_id)}
                     >
@@ -368,10 +394,10 @@ const Payment = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
-          <div>
+          {/* <div>
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
@@ -405,86 +431,153 @@ const Payment = () => {
             >
               Next
             </button>
-          </div>
+          </div> */}
 
           {/* <button onClick={() => setShowCreateForm(true)}>
             Create New Payment
           </button> */}
-          <button onClick={handleShowCreateForm}>Create New Payment</button>
+          {/* <button onClick={handleShowCreateForm}>Create New Payment</button> */}
         </>
       ) : (
         <>
-          <h2>Create Payment</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Payment
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedRental}
+                onChange={handleRentalChange}
+                //onChange={handleChange}
+              >
+                {rental.map((rental) => (
+                  <MenuItem value={rental.rental_id}>
+                    {`Inventory: ${rental.inventory.film.title}, Renter: ${rental.customer.email}`}
+                  </MenuItem>
+                ))}
+              </Select>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleStaffSearch} // Handle input change event
+                element={TextField}
+                label="Search Staff"
+                variant="outlined"
+                margin="normal"
+              />
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedStaff}
+                onChange={handleStaffChange}
+                //onChange={handleChange}
+              >
+                {staff.map((staff) => (
+                  <MenuItem
+                    value={staff.staff_id}
+                  >{`${staff.first_name} ${staff.last_name}`}</MenuItem>
+                ))}
+              </Select>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleCustomerSearch} // Handle input change event
+                element={TextField}
+                label="Search Customer"
+                variant="outlined"
+                margin="normal"
+              />
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedCustomer}
+                onChange={handleCustomerChange}
+                //onChange={handleChange}
+              >
+                {customer.map((customer) => (
+                  <MenuItem value={customer.customer_id}>
+                    {`${customer.email}`}
+                  </MenuItem>
+                ))}
+              </Select>
+              {/* <TextField
+                fullWidth
+                label="Film Rating"
+                variant="outlined"
+                margin="normal"
+                //value={newFilmRating}
+                //onChange={(e) => setNewFilmRating(e.target.value)}
+                component={
+                  <DatePicker
+                    selected={newPaymentDate}
+                    onChange={setNewPaymentDate}
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="Select a date"
+                  />
+                }
+              /> */}
 
-          {/* <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleRentalSearch} // Handle input change event
-          /> */}
+              <div
+                style={{
+                  marginTop: "10px",
 
-          <select ref={rentalRef}>
-            {rental.map((rental) => (
-              <option key={rental.rental_id} value={rental.rental_id}>
-                {`${rental.inventory.film.title}, ${rental.customer.email}`}
-              </option>
-            ))}
-          </select>
+                  padding: "0px",
+                }}
+              >
+                <DatePicker
+                  selected={newPaymentDate}
+                  onChange={setNewPaymentDate}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Select creation date"
+                />
+              </div>
 
-          <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleStaffSearch} // Handle input change event
-          />
-
-          <select ref={staffRef}>
-            {staff.map((staff) => (
-              <option key={staff.staff_id} value={staff.staff_id}>
-                {staff.first_name}
-              </option>
-            ))}
-          </select>
-
-          <DebounceInput
-            type="text"
-            placeholder="Search..."
-            minLength={2} // Minimum number of characters before debounce triggers
-            debounceTimeout={300} // Debounce timeout in milliseconds
-            onChange={handleCustomerSearch} // Handle input change event
-          />
-
-          <select ref={customerRef}>
-            {customer.map((customer) => (
-              <option key={customer.customer_id} value={customer.customer_id}>
-                {`${customer.email}, ${customer.address.address}`}
-              </option>
-            ))}
-          </select>
-
-          {/* <input
-            type="text"
-            value={newPaymentDate}
-            onChange={(e) => setNewPaymentDate(e.target.value)}
-            placeholder="Enter rental name"
-          /> */}
-
-          <input
-            type="text"
-            onChange={(e) => setNewAmount(e.target.value)}
-            placeholder="Enter rental amount"
-          />
-
-          <DatePicker
-            selected={newPaymentDate}
-            onChange={setNewPaymentDate}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select a date"
-          />
-          <button onClick={handleCreatePayment}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreatePayment}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
         </>
       )}
     </div>

@@ -134,7 +134,7 @@ const Category = () => {
                         {`${category.name}`}
                       </TableCell>
 
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           //color="primary"
@@ -147,7 +147,7 @@ const Category = () => {
                         >
                           Edit
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <Button
                           variant="contained"
@@ -205,7 +205,7 @@ const Category = () => {
             </Stack>
           </Container>
 
-          <h1>Category Page</h1>
+          {/* <h1>Category Page</h1>
           <h2>Categories</h2>
 
           <ul>
@@ -252,7 +252,7 @@ const Category = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
           {/* <div>
@@ -305,7 +305,50 @@ const Category = () => {
         </>
       ) : (
         <>
-          <h2>Create Category</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Category
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="Category Name"
+                variant="outlined"
+                margin="normal"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateCategory}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Category</h2>
           <input
             type="text"
             value={newCategoryName}
@@ -313,7 +356,7 @@ const Category = () => {
             placeholder="Enter category name"
           />
           <button onClick={handleCreateCategory}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

@@ -4,7 +4,14 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,8 +23,15 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/material/Select";
 
 const Film = () => {
+  //MUI Selectbox
+  const [selectedLanguage, setSelectedLanguage] = useState(0);
+  const handleLanguageChange = (event) => {
+    setSelectedLanguage(event.target.value);
+  };
+
   const [films, setFilms] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -117,6 +131,7 @@ const Film = () => {
     try {
       const response = await axios.get("/language");
       setLanguages(response.data.languages);
+      setSelectedLanguage(response.data.languages[0]["language_id"]);
     } catch (error) {
       console.error("Error fetching languages:", error);
     }
@@ -129,6 +144,7 @@ const Film = () => {
       );
       //console.log("languages:", response.data);
       setLanguages(response.data);
+      setSelectedLanguage(response.data[0]["language_id"]);
     } catch (error) {
       console.error("Error searching languages:", error);
       return [];
@@ -226,7 +242,144 @@ const Film = () => {
         </>
       ) : (
         <>
-          <h2>Create Film</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Film
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleLanguageSearch} // Handle input change event
+                element={TextField}
+                label="Search Languages"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedLanguage}
+                onChange={handleLanguageChange}
+                //onChange={handleChange}
+              >
+                {languages.map((language) => (
+                  <MenuItem value={language.language_id}>
+                    {language.name}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                fullWidth
+                label="Title"
+                variant="outlined"
+                margin="normal"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Description"
+                variant="outlined"
+                margin="normal"
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Year"
+                variant="outlined"
+                margin="normal"
+                value={newReleaseYear}
+                onChange={(e) => setNewReleaseYear(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Rental Duration"
+                variant="outlined"
+                margin="normal"
+                value={newRentalDuration}
+                onChange={(e) => setNewRentalDuration(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Rental Rate"
+                variant="outlined"
+                margin="normal"
+                value={newRentalRate}
+                onChange={(e) => setNewRentalRate(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Film Length"
+                variant="outlined"
+                margin="normal"
+                value={newFilmLength}
+                onChange={(e) => setNewFilmLength(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Replacement Cost"
+                variant="outlined"
+                margin="normal"
+                value={newReplacementCost}
+                onChange={(e) => setNewReplacementCost(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Film Rating"
+                variant="outlined"
+                margin="normal"
+                value={newFilmRating}
+                onChange={(e) => setNewFilmRating(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Special Features"
+                variant="outlined"
+                margin="normal"
+                value={newSpecialFeatures}
+                onChange={(e) => setNewSpecialFeatures(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateFilm}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Film</h2>
 
           <DebounceInput
             type="text"
@@ -301,7 +454,7 @@ const Film = () => {
             placeholder="Enter film special features"
           />
           <button onClick={handleCreateFilm}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

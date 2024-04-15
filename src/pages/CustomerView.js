@@ -214,7 +214,7 @@ const CustomerView = () => {
                   {`Store: ${customer.store.address.address}`}
                 </Typography>
 
-                <Button
+                {/* <Button
                   variant="contained"
                   //color="primary"
                   fullWidth
@@ -222,7 +222,7 @@ const CustomerView = () => {
                   style={{ marginTop: "20px" }}
                 >
                   Edit
-                </Button>
+                </Button> */}
               </Container>
             </>
           )}

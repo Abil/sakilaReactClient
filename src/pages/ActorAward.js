@@ -41,6 +41,12 @@ const style = {
 };
 
 const ActorAward = () => {
+  //MUI Selectbox
+  const [selectedActor, setSelectedActor] = useState(0);
+  const handleActorChange = (event) => {
+    setSelectedActor(event.target.value);
+  };
+
   const [actorsWithAwards, setActorsWithAwards] = useState([]);
   //const [actorsWithOutAwards, setActorsWithOutAwards] = useState([]);
 
@@ -122,6 +128,7 @@ const ActorAward = () => {
     try {
       const response = await axios.get("/actor/search");
       setActors(response.data);
+      setSelectedActor(response.data[0]["actor_id"]);
     } catch (error) {
       console.error("Error fetching actors:", error);
     }
@@ -142,6 +149,7 @@ const ActorAward = () => {
       const response = await axios.get(queryString);
       console.log("actors:", response.data);
       setActors(response.data);
+      setSelectedActor(response.data[0]["actor_id"]);
     } catch (error) {
       console.error("Error searching actors:", error);
       return [];
@@ -184,7 +192,7 @@ const ActorAward = () => {
                       <TableCell component="th" scope="row">
                         {`${actor.actor_award.awards}`}
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           //color="primary"
@@ -197,7 +205,7 @@ const ActorAward = () => {
                         >
                           Edit
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <Button
                           variant="contained"
@@ -240,10 +248,10 @@ const ActorAward = () => {
             </Stack>
           </Container>
 
-          <h1>ActorAward Page</h1>
-          <h2>ActorAwards</h2>
+          {/* <h1>ActorAward Page</h1>
+          <h2>ActorAwards</h2> */}
 
-          <ul>
+          {/* <ul>
             {actorsWithAwards.map((actor) => (
               <li key={actor.actor_id}>
                 {selectedActorId === actor.actor_id ? (
@@ -265,7 +273,7 @@ const ActorAward = () => {
                   <>
                     {`${actor.first_name}, ${actor.last_name}, Awards: ${actor.actor_award.awards} `}
                     {/* {actorsWithAwards.actorsWithAwards} {actorsWithAwards.actor.actor} */}
-                    {/* <button
+          {/* <button
                       onClick={() =>
                         handleNavigateActorAward(
                           actorsWithAwards.actorsWithAwards_id
@@ -273,7 +281,7 @@ const ActorAward = () => {
                       }
                     >
                       View
-                    </button> */}
+                    </button> 
                     <button
                       onClick={() => handleDeleteActorAward(actor.actor_id)}
                     >
@@ -286,10 +294,10 @@ const ActorAward = () => {
                 )}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Pagination */}
-          <div>
+          {/* <div>
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
@@ -323,16 +331,105 @@ const ActorAward = () => {
             >
               Next
             </button>
-          </div>
+          </div> */}
 
           {/* <button onClick={() => setShowCreateForm(true)}>
             Create New ActorAward
           </button> */}
-          <button onClick={handleShowCreateForm}>Create New ActorAward</button>
+          {/* <button onClick={handleShowCreateForm}>Create New ActorAward</button> */}
         </>
       ) : (
         <>
-          <h2>Create ActorAward</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Associate Actor Award
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleActorSearch} // Handle input change event
+                element={TextField}
+                label="Search Actors"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedActor}
+                onChange={handleActorChange}
+                //onChange={handleChange}
+              >
+                {actors.map((actor) => (
+                  <MenuItem
+                    value={actor.actor_id}
+                  >{`${actor.first_name} ${actor.last_name}`}</MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newActorAwardFirstName}
+                onChange={(e) => setNewActorAwardFirstName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                variant="outlined"
+                margin="normal"
+                value={newActorAwardLastName}
+                onChange={(e) => setNewActorAwardLastName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Year"
+                variant="outlined"
+                margin="normal"
+                value={newActorAwards}
+                onChange={(e) => setNewActorAwards(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateActorAward}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create ActorAward</h2>
 
           <DebounceInput
             type="text"
@@ -371,7 +468,7 @@ const ActorAward = () => {
             placeholder="Enter awards"
           />
           <button onClick={handleCreateActorAward}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>

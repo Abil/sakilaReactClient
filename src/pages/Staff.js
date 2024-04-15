@@ -4,7 +4,14 @@ import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
 //MUI
-import { Typography, Container, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,8 +23,19 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/material/Select";
 
 const Staff = () => {
+  //MUI Selectbox
+  const [selectedAddress, setSelectedAddress] = useState(0);
+  const handleAddressChange = (event) => {
+    setSelectedAddress(event.target.value);
+  };
+  const [selectedStore, setSelectedStore] = useState(0);
+  const handleStoreChange = (event) => {
+    setSelectedStore(event.target.value);
+  };
+
   const [staffs, setStaffs] = useState([]);
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
@@ -105,6 +123,7 @@ const Staff = () => {
     try {
       const response = await axios.get("/address");
       setAddresses(response.data.addresses);
+      setSelectedAddress(response.data.addresses[0]["address_id"]);
     } catch (error) {
       console.error("Error fetching addresses:", error);
     }
@@ -114,6 +133,7 @@ const Staff = () => {
     try {
       const response = await axios.get("/store");
       setStores(response.data.stores);
+      setSelectedStore(response.data.stores[0]["store_id"]);
     } catch (error) {
       console.error("Error fetching store:", error);
     }
@@ -126,6 +146,7 @@ const Staff = () => {
       );
       console.log("addresses:", response.data);
       setAddresses(response.data);
+      setSelectedAddress(response.data[0]["address_id"]);
     } catch (error) {
       console.error("Error searching addresses:", error);
       return [];
@@ -139,6 +160,7 @@ const Staff = () => {
       );
       console.log("stores:", response.data);
       setStores(response.data);
+      setSelectedStore(response.data[0]["store_id"]);
     } catch (error) {
       console.error("Error searching addresses:", error);
       return [];
@@ -199,7 +221,7 @@ const Staff = () => {
                           Delete
                         </Button>
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <Button
                           variant="contained"
                           // color="secondary"
@@ -209,7 +231,7 @@ const Staff = () => {
                         >
                           View
                         </Button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -243,7 +265,134 @@ const Staff = () => {
         </>
       ) : (
         <>
-          <h2>Create Staff</h2>
+          <Container
+            maxWidth="sm"
+            style={{
+              marginTop: "100px",
+              border: "1px solid #ccc",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography variant="h4" align="center" gutterBottom>
+              Create Staff
+            </Typography>
+            <FormControl fullWidth>
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleStoreSearch} // Handle input change event
+                element={TextField}
+                label="Search Store"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedStore}
+                onChange={handleStoreChange}
+                //onChange={handleChange}
+              >
+                {stores.map((store) => (
+                  <MenuItem value={store.store_id}>
+                    {store.address.address}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <DebounceInput
+                type="text"
+                placeholder="Search..."
+                minLength={2} // Minimum number of characters before debounce triggers
+                debounceTimeout={300} // Debounce timeout in milliseconds
+                onChange={handleAddressSearch} // Handle input change event
+                element={TextField}
+                label="Search Address"
+                variant="outlined"
+                margin="normal"
+              />
+
+              <Select
+                fullWidth
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                //value={age}
+                //placeholder="Select Country"
+                //label="Country"
+                value={selectedAddress}
+                onChange={handleAddressChange}
+                //onChange={handleChange}
+              >
+                {addresses.map((address) => (
+                  <MenuItem value={address.address_id}>
+                    {address.address}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newFirstName}
+                onChange={(e) => setNewFirstName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="First Name"
+                variant="outlined"
+                margin="normal"
+                value={newLastName}
+                onChange={(e) => setNewLastName(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                variant="outlined"
+                margin="normal"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Username"
+                variant="outlined"
+                margin="normal"
+                value={newUserName}
+                onChange={(e) => setNewUserName(e.target.value)}
+              />
+
+              <Button
+                variant="contained"
+                //color="primary"
+                fullWidth
+                onClick={handleCreateStaff}
+                style={{ marginTop: "20px" }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="contained"
+                //color="default"
+                fullWidth
+                onClick={() => setShowCreateForm(false)}
+                style={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </FormControl>
+          </Container>
+
+          {/* <h2>Create Staff</h2>
 
           <DebounceInput
             type="text"
@@ -302,7 +451,7 @@ const Staff = () => {
             placeholder="Enter staff username"
           />
           <button onClick={handleCreateStaff}>Create</button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)}>Cancel</button> */}
         </>
       )}
     </div>
